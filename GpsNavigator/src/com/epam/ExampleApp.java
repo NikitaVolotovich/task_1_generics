@@ -10,7 +10,7 @@ public class ExampleApp {
 
     public static void main(String[] args) {
         final GpsNavigator navigator = new Navigator();
-        navigator.readData("A:\\Programming\\EPAM_RoadsTask\\resources\\smth.txt");
+        navigator.readData("./resources/path");
 
         findPath(navigator, "A", "C");
         findPath(navigator, "C", "A");

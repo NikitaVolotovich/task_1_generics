@@ -15,13 +15,16 @@ public class Path {
      * Total cost of the path.
      */
     private int cost;
-
+    private int benefitCriterion;
     private int length;
 
-    public Path(List<String> path, int cost, int length) {
+
+
+    public Path(List<String> path, int cost, int length, int benefit) {
         this.path = path;
         this.cost = cost;
         this.length = length;
+        this.benefitCriterion += benefit;
     }
 
     public List<String> getPath() {
@@ -36,8 +39,12 @@ public class Path {
         return length;
     }
 
+    public int getBenefitCriterion() {
+        return benefitCriterion;
+    }
+
     @Override
     public String toString() {
-        return String.format(TO_STRING_PATTERN, String.join(" ", path), cost);
+        return String.format(TO_STRING_PATTERN, String.join(" ", path), benefitCriterion);
     }
 }

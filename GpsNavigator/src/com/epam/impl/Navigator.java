@@ -46,14 +46,14 @@ public class Navigator implements GpsNavigator {
 
         final ArrayList<String> points = new ArrayList<>();
         points.add(pointA);
-        final Path path = new Path(points, 0, 0);
+        final Path path = new Path(points, 0, 0, 0);
         possiblePaths.add(path);
 
         createRoot(path, destinations);
 
         final List<Path> paths = possiblePaths.stream()
             .filter(p -> pointB.equals(p.getPath().get(p.getPath().size() - 1)))
-            .sorted(Comparator.comparing(Path::getLength))
+            .sorted(Comparator.comparing(Path::getBenefitCriterion))
             .collect(Collectors.toList());
 
         if (paths.isEmpty()) {
@@ -68,13 +68,13 @@ public class Navigator implements GpsNavigator {
 
     private void createRoot(final Path path, final List<Destination> destinations) {
         for (final Destination destination : destinations) {
-            if (pointB.equals(path.getPath().get(path.getPath().size() - 1))) {
+            if (pointB.equals(path.getPath().get(path.getPath().size() - 1))) { //это конец
                 return;
             }
 
-            if (pointB.equals(destination.getDestination())) {
+            if (pointB.equals(destination.getDestination())) { //конечная точка
                 addPoint(path, destination);
-            } else if (!path.getPath().contains(destination.getDestination())) {
+            } else if (!path.getPath().contains(destination.getDestination())) { //если путь не содержит след. точку
                 final Path newPath = addPoint(path, destination);
                 createRoot(newPath, map.get(destination.getDestination()));
             }
@@ -87,7 +87,8 @@ public class Navigator implements GpsNavigator {
         pathList.add(destination.getDestination());
         final int newCost = path.getCost() + destination.getCost();
         final int newLength = path.getLength() + destination.getLength();
-        final Path nextPath = new Path(pathList, newCost, newLength);
+        final int newBenefitCriterion = path.getBenefitCriterion() + destination.getBenefitCriterion();
+        final Path nextPath = new Path(pathList, newCost, newLength, newBenefitCriterion);
         possiblePaths.add(nextPath);
         return nextPath;
     }
